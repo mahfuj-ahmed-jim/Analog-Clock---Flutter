@@ -1,3 +1,4 @@
+import 'package:analog_clock/component/body.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:analog_clock/size_config.dart';
@@ -20,6 +21,7 @@ class HomeScreen extends StatelessWidget {
           BuildAddButton(),
         ],
       ),
+      body: const Body(),
     );
   }
 }
