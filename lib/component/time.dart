@@ -39,7 +39,7 @@ class _TimeState extends State<Time> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          '$hour : $minute',
+          '$hour:$minute',
           style: Theme.of(context).textTheme.headline1,
         ),
         const SizedBox(
