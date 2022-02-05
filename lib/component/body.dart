@@ -11,11 +11,7 @@ class Body extends StatelessWidget {
         width: double.infinity,
         child: Column(
           children: [
-            Text(
-              'Dhaka, Bangladesh',
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            const Time(),
+            Time(),
             const Spacer(),
             const Clock(),
             const Spacer(),

@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:analog_clock/models/cities.dart';
 import 'package:analog_clock/models/world_time.dart';
 import 'package:analog_clock/size_config.dart';
+import 'package:analog_clock/static/static.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -18,33 +21,52 @@ class CountryCard extends StatefulWidget {
 
 class _CountryCardState extends State<CountryCard> {
   late String timeZone = 'Waiting', time = 'waiting', period = 'waiting';
+  late TimeOfDay timeOfDay;
   late WorldTime worldTime;
+  late DateTime dateTime = DateTime.now();
+
+  void changeTime() {
+    setState(() {
+      String hour = timeOfDay.hour <= 12
+          ? timeOfDay.hour >= 10
+              ? '${timeOfDay.hour}'
+              : '0${timeOfDay.hour}'
+          : timeOfDay.hour % 12 >= 10
+              ? '${timeOfDay.hour % 12}'
+              : '0${timeOfDay.hour % 12}';
+      String minute = timeOfDay.minute >= 10
+          ? '${timeOfDay.minute}'
+          : '0${timeOfDay.minute}';
+      time = '$hour:$minute';
+
+      period = timeOfDay.period == DayPeriod.am ? 'AM' : 'PM';
+      timeZone = worldTime.offset;
+    });
+  }
 
   Future<void> setTime() async {
     worldTime = WorldTime(location: 'Dhaka', urlEndPoint: widget.city.endPoint);
     await worldTime.getTime();
-    setState(() {
-      String hour = worldTime.timeOfDay.hour <= 12
-          ? worldTime.timeOfDay.hour >= 10
-              ? '${worldTime.timeOfDay.hour}'
-              : '0${worldTime.timeOfDay.hour}'
-          : worldTime.timeOfDay.hour % 12 >= 10
-              ? '${worldTime.timeOfDay.hour % 12}'
-              : '0${worldTime.timeOfDay.hour % 12}';
-      String minute = worldTime.timeOfDay.minute >= 10
-          ? '${worldTime.timeOfDay.minute}'
-          : '0${worldTime.timeOfDay.minute}';
-      time = '$hour:$minute';
-
-      period = worldTime.timeOfDay.period == DayPeriod.am ? 'AM' : 'PM';
-      timeZone = worldTime.offset;
-    });
+    timeOfDay = worldTime.timeOfDay;
+    changeTime();
   }
 
   @override
   void initState() {
     super.initState();
     setTime();
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (dateTime.minute != DateTime.now().minute) {
+        if (timeOfDay.minute >= 59) {
+          timeOfDay = TimeOfDay(hour: timeOfDay.hour + 1, minute: 0);
+        } else {
+          timeOfDay =
+              TimeOfDay(hour: timeOfDay.hour, minute: timeOfDay.minute + 1);
+        }
+        changeTime();
+        dateTime = DateTime.now();
+      }
+    });
   }
 
   @override
@@ -57,7 +79,17 @@ class _CountryCardState extends State<CountryCard> {
         child: AspectRatio(
           aspectRatio: 1.32,
           child: InkWell(
-            onTap: () => print(widget.city.name),
+            onTap: () {
+              StaticTime.name = widget.city.name;
+              StaticTime.timeOfDay = timeOfDay;
+              DateTime dateTime = DateTime.now();
+              StaticTime.dateTime = DateTime(
+                  dateTime.year,
+                  dateTime.month,
+                  dateTime.day,
+                  worldTime.timeOfDay.hour,
+                  worldTime.timeOfDay.minute);
+            },
             child: Container(
               padding: EdgeInsets.all(getProportionateScreenWidth(20)),
               decoration: BoxDecoration(

@@ -5,6 +5,7 @@ import 'package:analog_clock/component/component.dart';
 import 'package:analog_clock/constants/constants.dart';
 import 'package:analog_clock/models/models.dart';
 import 'package:analog_clock/size_config.dart';
+import 'package:analog_clock/static/time_static.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +19,7 @@ class Clock extends StatefulWidget {
 
 class _ClockState extends State<Clock> {
   DateTime dateTime = DateTime.now();
+  DateTime secondDateTime = DateTime.now();
 
   @override
   void initState() {
@@ -25,7 +27,8 @@ class _ClockState extends State<Clock> {
     // constantly update time
     Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
-        dateTime = DateTime.now();
+        dateTime = StaticTime.dateTime;
+        secondDateTime = DateTime.now();
       });
     });
   }
@@ -53,7 +56,11 @@ class _ClockState extends State<Clock> {
             child: Transform.rotate(
               angle: -pi / 2,
               child: CustomPaint(
-                painter: ClockPainter(context, dateTime),
+                painter: ClockPainter(
+                  context,
+                  dateTime,
+                  secondDateTime,
+                ),
               ),
             ),
           ),

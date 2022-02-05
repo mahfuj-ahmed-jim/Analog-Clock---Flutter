@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 class ClockPainter extends CustomPainter {
   final BuildContext context;
   final DateTime dateTime;
+  final DateTime secondDateTime;
 
-  ClockPainter(this.context, this.dateTime);
+  ClockPainter(this.context, this.dateTime, this.secondDateTime);
   @override
   void paint(Canvas canvas, Size size) {
     double centerX = size.width / 2;
@@ -54,10 +55,10 @@ class ClockPainter extends CustomPainter {
     // Second Calculation
     // size.width * 0.4 define our line height
     // dateTime.second * 6 because 360 / 60 = 6
-    double secondX =
-        centerX + size.width * 0.4 * cos((dateTime.second * 6) * pi / 180);
-    double secondY =
-        centerY + size.width * 0.4 * sin((dateTime.second * 6) * pi / 180);
+    double secondX = centerX +
+        size.width * 0.4 * cos((secondDateTime.second * 6) * pi / 180);
+    double secondY = centerY +
+        size.width * 0.4 * sin((secondDateTime.second * 6) * pi / 180);
 
     // Second Line
     canvas.drawLine(center, Offset(secondX, secondY),

@@ -18,7 +18,7 @@ class OtherCityTimes extends StatelessWidget {
     Cities(name: 'Dhaka, Bangladesh', endPoint: 'Asia/Dhaka'),
     Cities(name: 'Dhaka, Bangladesh', endPoint: 'Asia/Dhaka'),*/
     ];
-    return Container(
+    return SizedBox(
       height: 160,
       child: ListView.builder(
           scrollDirection: Axis.horizontal,
