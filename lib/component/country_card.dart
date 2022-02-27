@@ -20,7 +20,7 @@ class CountryCard extends StatefulWidget {
 }
 
 class _CountryCardState extends State<CountryCard> {
-  late String timeZone = 'Waiting', time = 'waiting', period = 'waiting';
+  late String timeZone = 'loading........', time = '.......', period = '';
   late TimeOfDay timeOfDay;
   late WorldTime worldTime;
   late DateTime dateTime = DateTime.now();
